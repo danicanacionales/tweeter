@@ -10,21 +10,26 @@
     </head>
 
     <script>
-        function sendMessage(){
-            var message = document.getElementById("textarea").value;
-            
-            var array = splitMessage("Requests a of stupid. City, more organization vices gentlemen, is word the a five. She reasoning finds hometown over now be in the sign us, escape, from the of he being that ensure each luxury writing someone he a copy by desk narrow front dissolute they field is relays mouse.");
+        window.onload = function() {
+            displayMessages(splitMessage("I can't believe Tweeter now supports chunking my messages, so I don't have to do it myself."));
+            displayMessages(splitMessage("Avoid and the a depend that concepts which furniture with of when standpoint have music. Queen or the to as I that to she middle by be, and than concepts that of whom the bit greediness beings kicked brought shudder. Where impasse. It of took what of would and narrow and there for tone alone, people as a leaders, this pay of turn snow the road. How was. Of concise safely have would as seal structure was back absolutely didn't container stand set searching the he'd that they'd psychological project as but written front as on rung. Contracting royal issued."));
+        };
+
+        function displayMessages(array){
             var ul = document.getElementById("messages");
             for(var i = 0; i < array.length; i++){
                 if(array[i] != undefined){
                     var li = document.createElement("li");
-                    li.appendChild(document.createTextNode(array[i]));
-                    li.setAttribute("class", "collection-item");
-                    ul.appendChild(li);
-                    console.log(array[i]);
+                    var content = '<li class="collection-item"><div>' + array[i] + '<a href="#!" class="secondary-content">'+ array[i].length +'</a></div></li>';
+                    ul.insertAdjacentHTML('beforeend', content);
                 }
             }
-            
+        }
+
+        function sendMessage(){
+            var message = document.getElementById("textarea").value;
+            var array = splitMessage(message);
+            displayMessages(array);
         }
 
         function splitMessage(msg){
@@ -40,8 +45,20 @@
             var grossCount = Math.ceil(grossChars / 50);
             console.log("Gross chars: " + grossChars);
             console.log("Gross count: " + grossCount);
-            
-            var addChars = grossCount * 4;
+            var digit, add;
+            if(grossCount < 10){
+                digit = 4;
+                add = 0;
+            }
+            else if(grossCount >= 10 && grossCount < 100){
+                digit = 6;
+                add = 9;
+            }            
+                
+    
+            var addChars = (grossCount * digit) + substrings.length + add;
+            console.log("Spaces: " + substrings.length);
+            console.log("Digits: " + digit);
             console.log("Additional chars: " + addChars);
             
             var totalChars = grossChars + addChars;
@@ -53,17 +70,22 @@
             var array = new Array(totalCount);
             var ind = "";
             var ctr = 0;
-            for(var i = 0; i < totalCount; i++){
-                ind = (i + 1) + "/" + totalCount;
+            for(var i = 0; i <= totalCount; i++){
+                ind = (i + 1) + "/" + (totalCount+1);
 
                 var currString = ind;
                 while (currString.length < 50){
                     var checker = currString + " " + substrings[ctr];
-                    if(checker.length > 50){
+                    if(checker.length >= 50){
                         array.push(currString);
                         break;
                     }else{
-                        currString += " " + substrings[ctr];
+						console.log("haha: " + substrings[ctr] + " " + ctr + " " + substrings.length);
+						if(substrings[ctr] !== undefined) {
+							currString += " " + substrings[ctr];
+						} else {
+							currString += "        ";
+						}
                         ctr++;
                     }
                 }
